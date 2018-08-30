@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <p>Current time</p>
+
+
+    <p id="demo"></p><br>
+    <button>GET Date and Time</button>
+
+    <script>
+        document.querySelector("button").addEventListener('click', startTimer)
+        function startTimer() {
+            var myVar = setInterval((myTimer) => {
+                var d = new Date();
+                var time = d.toLocaleTimeString();
+                document.getElementById("demo").innerHTML = time;
+            }, 1000);
+        }
+
+
+    </script>
+
+</body>
+
+</html>
