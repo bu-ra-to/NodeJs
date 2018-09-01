@@ -1,27 +1,33 @@
-var http = require("http");
-// var fs = require("fs");
-// var util = require("util");
+var http = require('http');
 
-http
-  .createServer(function(req, res) {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.write("Hello World!");
+var server = new http.Server((req, res) => {
+  req.on('error', (err) => {
+    console.error(err);
+    res.statusCode = 400;
     res.end();
+  });
+  res.on('error', (err) => {
+    console.error(err);
+  });
+  if (req.url === '/favicon.ico') {
+    res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+    res.end();
+    return
+  }
+  else if (req.method === "GET") {
     var time;
-    function serverTime(ms) {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), ms);
-        () => reject(console.error("Eroor"));
-      });
-    }
+    setTimeout(() => {
+      clearInterval(interval)
+      console.log(`\n Server stopped at ${time}`)
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(`<html><body><h1>${time}</h1></body></html>`);
+    }, 5000)
     var interval = setInterval(() => {
       time = new Date().toUTCString();
-      console.log(`Today is ${time}`);
+      process.stdout.clearLine()
+      process.stdout.cursorTo(0)
+      process.stdout.write(`Current time is ${time}`);
     }, 1000);
-    serverTime(6000).then(() => {
-      clearInterval(interval);
-      console.log(`\n Server stopped on ${time}`);
-    });
-  })
-
-  .listen(8000);
+  }
+});
+server.listen(3000, () => { console.log("I'm Listenning...") })
